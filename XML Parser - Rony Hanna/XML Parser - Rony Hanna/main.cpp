@@ -21,7 +21,6 @@ ofstream outputXmlFile;
 ExcelParser excelParser;
 vector<string> excelFile, excelFileTags, excelFileClosingTags, excelData, excelData2;
 int startIndex = 0;
-int sizeOfXml = 0;
 int c = 0;
 
 void ConvertToCSV()
@@ -40,10 +39,8 @@ void ConvertToCSV()
 		xmlTag.push_back(tag);
 	}
 
-	sizeOfXml = xmlTag.size();
-
 	// Read data without tags
-	for (unsigned int i = 0; i < sizeOfXml; ++i)
+	for (unsigned int i = 0; i < xmlTag.size(); ++i)
 	{
 		xmlDoc[i] = xmlFile.readXml(line, xmlTag[i]);
 	}
@@ -73,6 +70,12 @@ void ConvertToCSV()
 	}
 
 	outputExcelFile.close();
+	xml.clear();
+	for (unsigned int i = 0; i < xmlTag.size(); ++i)
+	{
+		xmlDoc[i].clear(); 
+	}
+	xmlTag.clear();
 }
 void ConvertToXML()
 {
@@ -124,6 +127,12 @@ void ConvertToXML()
 	outputXmlFile << "\t</Body>\n";
 	outputXmlFile << "</Root>\n";
 	outputXmlFile.close();
+
+	excelFileTags.clear();
+	excelFile.clear();
+	excelFileClosingTags.clear();
+	excelData.clear();
+	excelData2.clear();
 }
 
 HWND textfield;
