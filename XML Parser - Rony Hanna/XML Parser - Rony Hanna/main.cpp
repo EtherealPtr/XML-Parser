@@ -2,10 +2,12 @@
 #include "ExcelParser.h"
 #include <Windows.h>
 
-LPCWSTR g_szClassName = L"MainWindowClass";
+char* g_szClassName = "MainWindowClass";
 
 #define TO_EXCEL_BTN 1
 #define TO_XML_BTN 2
+#define TEXT_INPUT_ID 3
+#define SUBMIT_BUTTON 4
 
 extern string filename = "FavouriteGames";
 
@@ -125,6 +127,8 @@ void ConvertToXML()
 }
 
 HWND textfield;
+char filePath[255];
+HWND hEdit;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -132,14 +136,20 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_CREATE:
 	{
-		LPCWSTR button01_ID = L"BUTTON";
-		LPCWSTR button02_ID = L"BUTTON";
-		LPCWSTR button01_text = L"Generate CSV/Excel File";
-		LPCWSTR button02_text = L"Generate XML File";
+		char* button01_ID = "BUTTON";
+		char* button02_ID = "BUTTON";
+		char* button3_ID = "BUTTON";
+		char* button01_text = "Generate CSV/Excel File";
+		char* button02_text = "Generate XML File";
+		char* button03_text = "Submit";
 		HWND button01 = CreateWindowEx(NULL, button01_ID, button01_text, BS_DEFPUSHBUTTON | WS_VISIBLE | WS_BORDER | WS_CHILD, 10, 10, 200, 50, hwnd, (HMENU)TO_EXCEL_BTN, NULL, NULL);
 		HWND button02 = CreateWindowEx(NULL, button02_ID, button02_text, BS_DEFPUSHBUTTON | WS_VISIBLE | WS_BORDER | WS_CHILD, 10, 100, 200, 50, hwnd, (HMENU)TO_XML_BTN, NULL, NULL);
-		
-		textfield = CreateWindow(L"STATIC", L"Copyright (c) 2017 Rony Hanna", WS_VISIBLE | WS_CHILD, 20, 200, 220, 20, hwnd, NULL, NULL, NULL);
+		hEdit = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", "Enter file name then press submit (default file is FavouriteGames)",
+			WS_CHILD | WS_VISIBLE, 10, 220, 450, 20, hwnd, (HMENU)TEXT_INPUT_ID, GetModuleHandle(NULL), NULL);
+		 
+		HWND button3 = CreateWindowEx(NULL, button3_ID, button03_text, BS_DEFPUSHBUTTON | WS_VISIBLE | WS_BORDER | WS_CHILD, 10, 250, 450, 40, hwnd, (HMENU)SUBMIT_BUTTON, NULL, NULL);
+
+		textfield = CreateWindow("STATIC", "Copyright (c) 2017 Rony Hanna - Media Design School", WS_VISIBLE | WS_CHILD, 30, 430, 400, 20, hwnd, NULL, NULL, NULL);
 	}
 	break;
 	case WM_COMMAND:
@@ -148,10 +158,27 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		{
 		case TO_EXCEL_BTN:
 			ConvertToCSV();
+			MessageBox(NULL, "An Excel/CSV file has been successfully generated.", "Operation Complete", MB_OK | MB_ICONINFORMATION);
 			break;
 
 		case TO_XML_BTN:
 			ConvertToXML();
+			MessageBox(NULL, "An XML file has been successfully generated.", "Operation Complete", MB_OK | MB_ICONINFORMATION);
+			break;
+			 
+		case SUBMIT_BUTTON:
+			int stat = 0;
+			char* t = &filePath[0];
+			stat = GetWindowText(hEdit, t, 20); 
+		 
+			std::string s(filePath);
+			filename.clear();
+			filename = s;
+
+			char buffer[100];
+			string name = filename;
+			sprintf_s(buffer, "The file %s is now read to be parsed.", name.c_str());
+			MessageBox(NULL, buffer, "Ready", MB_OK | MB_ICONINFORMATION);
 			break;
 		}
 	}
@@ -183,26 +210,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	wc.hInstance = hInstance;
 	wc.hIconSm = LoadIcon(NULL, IDC_ICON);
 	wc.hIcon = LoadIcon(NULL, IDC_ICON);
-	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	wc.hbrBackground = (HBRUSH)(LTGRAY_BRUSH);
 	wc.cbWndExtra = 0;
 	wc.cbSize = sizeof(WNDCLASSEX);
 	wc.cbClsExtra = 0;
 
 	if (!RegisterClassEx(&wc))
 	{
-		LPCWSTR Error01 = L"Could not register class";
-		LPCWSTR Error01_Caption = L"Error";
+		char* Error01 = "Could not register class";
+		char* Error01_Caption = "Error";
 		MessageBox(NULL, Error01, Error01_Caption, MB_OK | MB_ICONERROR);
 	}
 
-	LPCWSTR WindowTitle = L"XML Parser Tool - Rony Hanna (c) 2017 Media Design School";
+	char* WindowTitle = "XML Parser Tool - Rony Hanna (c) 2017 Media Design School";
 
-	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE, g_szClassName, WindowTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 500, 300, NULL, NULL, hInstance, NULL);
+	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE, g_szClassName, WindowTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 500, 500, NULL, NULL, hInstance, NULL);
 
 	if (hwnd == NULL)
 	{
-		LPCWSTR Error02 = L"Could not create window!";
-		LPCWSTR Error02_Caption = L"Error";
+		char* Error02 = "Could not create window!";
+		char* Error02_Caption = "Error";
 		MessageBox(NULL, Error02, Error02_Caption, MB_OK | MB_ICONERROR);
 	}
 
@@ -217,3 +244,4 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	return msg.wParam;
 }
+ 
