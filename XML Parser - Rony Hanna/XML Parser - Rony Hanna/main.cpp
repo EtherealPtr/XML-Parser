@@ -8,6 +8,7 @@ char* g_szClassName = "MainWindowClass";
 #define TO_XML_BTN 2
 #define TEXT_INPUT_ID 3
 #define SUBMIT_BUTTON 4
+#define HELP 5
 
 extern string filename = "FavouriteGames";
 
@@ -148,19 +149,25 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		char* button01_ID = "BUTTON";
 		char* button02_ID = "BUTTON";
 		char* button3_ID = "BUTTON";
+		char* button4_ID = "BUTTON";
 		char* button01_text = "Generate CSV/Excel File";
 		char* button02_text = "Generate XML File";
 		char* button03_text = "Submit";
+		char* button04_text = "Help";
+
 		HWND button01 = CreateWindowEx(NULL, button01_ID, button01_text, BS_DEFPUSHBUTTON | WS_VISIBLE | WS_BORDER | WS_CHILD, 10, 10, 200, 50, hwnd, (HMENU)TO_EXCEL_BTN, NULL, NULL);
 		HWND button02 = CreateWindowEx(NULL, button02_ID, button02_text, BS_DEFPUSHBUTTON | WS_VISIBLE | WS_BORDER | WS_CHILD, 10, 100, 200, 50, hwnd, (HMENU)TO_XML_BTN, NULL, NULL);
-		hEdit = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", "Enter file name then press submit (default file is FavouriteGames)",
+		hEdit = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", "Enter file name then press submit (default file: FavouriteGames.xml)",
 			WS_CHILD | WS_VISIBLE, 10, 220, 450, 20, hwnd, (HMENU)TEXT_INPUT_ID, GetModuleHandle(NULL), NULL);
 		 
 		HWND button3 = CreateWindowEx(NULL, button3_ID, button03_text, BS_DEFPUSHBUTTON | WS_VISIBLE | WS_BORDER | WS_CHILD, 10, 250, 450, 40, hwnd, (HMENU)SUBMIT_BUTTON, NULL, NULL);
+		HWND button4 = CreateWindowEx(NULL, button4_ID, button04_text, BS_DEFPUSHBUTTON | WS_VISIBLE | WS_BORDER | WS_CHILD, 10, 350, 100, 40, hwnd, (HMENU)HELP, NULL, NULL);
 
 		textfield = CreateWindow("STATIC", "Copyright (c) 2017 Rony Hanna - Media Design School", WS_VISIBLE | WS_CHILD, 30, 430, 400, 20, hwnd, NULL, NULL, NULL);
 	}
+
 	break;
+
 	case WM_COMMAND:
 	{
 		switch (wParam)
@@ -175,6 +182,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 			MessageBox(NULL, "An XML file has been successfully generated.", "Operation Complete", MB_OK | MB_ICONINFORMATION);
 			break;
 			 
+		case HELP:
+			MessageBox(NULL, "To use this tool, simply click on the desired operation. By default, the target file is set to 'FavouriteGames.XML' located in the application's working directory. This tool is mature enough to parse almost any XML file so long they retain the same tags in each body (will be upgraded further in future patches). To change the target file, simply copy/paste your desired file into the application's working directory, then write the name of the file (excluding the file's type) inside of the edit box and click submit. The 'Generate CSV/Excel File' will generate an Excel/CSV (Comma-separated values) file from the XML file while the 'Generate XML File' will generate an XML file from an Excel/CSV file.", "How To Use This Tool", MB_OK | MB_ICONINFORMATION);
+			break;
+
 		case SUBMIT_BUTTON:
 			int stat = 0;
 			char* t = &filePath[0];
@@ -188,6 +199,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 			string name = filename;
 			sprintf_s(buffer, "The file %s is now read to be parsed.", name.c_str());
 			MessageBox(NULL, buffer, "Ready", MB_OK | MB_ICONINFORMATION);
+			
 			break;
 		}
 	}
