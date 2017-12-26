@@ -2,30 +2,27 @@
 #include "ExcelParser.h"
 #include <Windows.h>
 
-char* g_szClassName = "MainWindowClass";
-
 #define TO_EXCEL_BTN 1
 #define TO_XML_BTN 2
 #define TEXT_INPUT_ID 3
 #define SUBMIT_BUTTON 4
 #define HELP 5
 
+// extern that holds the name of the file to be parsed 
 extern string filename = "FavouriteGames";
 
-ofstream outputExcelFile;
-string line;
-vector<string> xml, xmlDoc[255];
-vector<string> xmlTag;
-XMLParser xmlFile;
-
-ofstream outputXmlFile;
-ExcelParser excelParser;
-vector<string> excelFile, excelFileTags, excelFileClosingTags, excelData, excelData2;
-int startIndex = 0;
-int c = 0;
-
-void ConvertToCSV()
+// -----------------------------
+// @Author: Rony Hanna
+// @Description: Function that generates an Excel/CSV file from an XML file 
+// -----------------------------
+void GenerateCSV()
 {
+	XMLParser xmlFile;
+	vector<string> xmlTag;
+	ofstream outputExcelFile;
+	string line;
+	vector<string> xml, xmlDoc[255];
+
 	// Read XML tags
 	xml = xmlFile.readXml(line);
 	for (unsigned int i = 0; i < xml.size(); ++i)
@@ -78,8 +75,21 @@ void ConvertToCSV()
 	}
 	xmlTag.clear();
 }
-void ConvertToXML()
+
+// -----------------------------
+// @Author: Rony Hanna
+// @Description: Function that generates an XML file from an Excel/CSV file 
+// -----------------------------
+void GenerateXML()
 {
+	ofstream outputXmlFile;
+	ExcelParser excelParser;
+	vector<string> excelFile, excelFileTags, excelFileClosingTags, excelData, excelData2;
+	string line;
+
+	int startIndex = 0;
+	int c = 0;
+
 	excelFile = excelParser.readCsvTags(line);
 	for (unsigned int i = 0; i < excelFile.size() - 1; ++i)
 	{
@@ -140,6 +150,10 @@ HWND textfield;
 char filePath[255];
 HWND hEdit;
 
+// -----------------------------
+// @Author: Rony Hanna
+// @Description: Callback function that processes messages sent to the window 
+// -----------------------------
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (Msg)
@@ -162,8 +176,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		 
 		HWND button3 = CreateWindowEx(NULL, button3_ID, button03_text, BS_DEFPUSHBUTTON | WS_VISIBLE | WS_BORDER | WS_CHILD, 10, 250, 450, 40, hwnd, (HMENU)SUBMIT_BUTTON, NULL, NULL);
 		HWND button4 = CreateWindowEx(NULL, button4_ID, button04_text, BS_DEFPUSHBUTTON | WS_VISIBLE | WS_BORDER | WS_CHILD, 10, 350, 100, 40, hwnd, (HMENU)HELP, NULL, NULL);
-
-		textfield = CreateWindow("STATIC", "Copyright (c) 2017 Rony Hanna - Media Design School", WS_VISIBLE | WS_CHILD, 30, 430, 400, 20, hwnd, NULL, NULL, NULL);
 	}
 
 	break;
@@ -173,17 +185,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		switch (wParam)
 		{
 		case TO_EXCEL_BTN:
-			ConvertToCSV();
+			GenerateCSV();
 			MessageBox(NULL, "An Excel/CSV file has been successfully generated.", "Operation Complete", MB_OK | MB_ICONINFORMATION);
 			break;
 
 		case TO_XML_BTN:
-			ConvertToXML();
+			GenerateXML();
 			MessageBox(NULL, "An XML file has been successfully generated.", "Operation Complete", MB_OK | MB_ICONINFORMATION);
 			break;
 			 
 		case HELP:
-			MessageBox(NULL, "To use this tool, simply click on the desired operation. By default, the target file is set to 'FavouriteGames.XML' located in the application's working directory. This tool is mature enough to parse almost any XML file so long they retain the same tags in each body (will be upgraded further in future patches). To change the target file, simply copy/paste your desired file into the application's working directory, then write the name of the file (excluding the file's type) inside of the edit box and click submit. The 'Generate CSV/Excel File' will generate an Excel/CSV (Comma-separated values) file from the XML file while the 'Generate XML File' will generate an XML file from an Excel/CSV file.", "How To Use This Tool", MB_OK | MB_ICONINFORMATION);
+			MessageBox(NULL, "To use this tool, simply click on the desired operation. By default, the target file is set to 'FavouriteGames.XML' located within the application's working directory. To change the target file, simply copy/paste your desired file into the application's working directory, then write the name of the file (excluding the file's type) inside of the edit box and click submit. The 'Generate CSV/Excel File' will generate an Excel/CSV (Comma-separated values) file from the XML file while the 'Generate XML File' will generate an XML file from an Excel/CSV file. Created by Rony Hanna - 2017.", "How To Use", MB_OK | MB_ICONINFORMATION);
 			break;
 
 		case SUBMIT_BUTTON:
@@ -197,7 +209,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 
 			char buffer[100];
 			string name = filename;
-			sprintf_s(buffer, "The file %s is now read to be parsed.", name.c_str());
+			sprintf_s(buffer, "The file %s is now ready to be parsed.", name.c_str());
 			MessageBox(NULL, buffer, "Ready", MB_OK | MB_ICONINFORMATION);
 			
 			break;
@@ -216,6 +228,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+// -----------------------------
+// @Author: Rony Hanna
+// @Description: Program entry point (handles window creation and messages)
+// -----------------------------
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	WNDCLASSEX wc;
@@ -226,7 +242,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	wc.style = 0;
 	wc.lpszMenuName = NULL;
-	wc.lpszClassName = g_szClassName;
+	wc.lpszClassName = "MainWindowClass";
 	wc.lpfnWndProc = WndProc;
 	wc.hInstance = hInstance;
 	wc.hIconSm = LoadIcon(NULL, IDC_ICON);
@@ -243,9 +259,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		MessageBox(NULL, Error01, Error01_Caption, MB_OK | MB_ICONERROR);
 	}
 
-	char* WindowTitle = "XML Parser Tool - Rony Hanna (c) 2017 Media Design School";
+	char* WindowTitle = "XML Parser Tool - Rony Hanna 2017";
 
-	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE, g_szClassName, WindowTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 500, 500, NULL, NULL, hInstance, NULL);
+	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE, "MainWindowClass", WindowTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 500, 500, NULL, NULL, hInstance, NULL);
 
 	if (hwnd == NULL)
 	{
@@ -265,4 +281,3 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	return msg.wParam;
 }
- 

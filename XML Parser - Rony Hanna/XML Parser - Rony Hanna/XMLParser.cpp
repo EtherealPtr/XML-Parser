@@ -4,10 +4,14 @@ extern string filename;
 
 XMLParser::XMLParser() :
 	m_isContained(false)
-{}
+{ /* Do Nothing Else */ }
 
 XMLParser::~XMLParser() { /* Do Nothing */ }
 
+// -----------------------------
+// @Author: Rony Hanna
+// @Description: Function that reads the data within the tags of an XML file
+// -----------------------------
 std::vector<string> XMLParser::readXml(string line, string xmlTag)
 {
 	// Open the well-formed XML file 
@@ -102,6 +106,10 @@ std::vector<string> XMLParser::readXml(string line, string xmlTag)
 	return read_xml_file;
 }
 
+// -----------------------------
+// @Author: Rony Hanna
+// @Description: Function that reads the Tags of each line in an XML file 
+// -----------------------------
 std::vector<string> XMLParser::readXml(string line)
 {
 	// Open the well-formed XML file 

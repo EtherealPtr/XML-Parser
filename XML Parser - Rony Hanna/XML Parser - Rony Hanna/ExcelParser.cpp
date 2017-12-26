@@ -1,7 +1,8 @@
 #include "ExcelParser.h"
 #include <algorithm>
-#include <iostream>
 #include <sstream>
+#include <fstream>
+#include <iostream>
 
 using std::ifstream;
 using std::vector;
@@ -10,13 +11,15 @@ using std::string;
 extern string filename;
 
 ExcelParser::ExcelParser()
-{
-}
+{ /* Do Nothing */ }
 
 ExcelParser::~ExcelParser()
-{
-}
+{ /* Do Nothing */ }
 
+// -----------------------------
+// @Author: Rony Hanna
+// @Description: Function that reads the Tags of each line
+// -----------------------------
 std::vector<std::string> ExcelParser::readCsvTags(std::string _line)
 {
 	// Open the excisting csv file
@@ -58,6 +61,10 @@ std::vector<std::string> ExcelParser::readCsvTags(std::string _line)
 	return read_csv_file;
 }
 
+// -----------------------------
+// @Author: Rony Hanna
+// @Description: Function that reads the data within the tags of each line
+// -----------------------------
 std::vector<std::string> ExcelParser::readCsv(std::string _line, int& _iteration)
 {
 	// Open the excisting csv file

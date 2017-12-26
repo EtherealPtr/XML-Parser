@@ -5,10 +5,15 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
-using namespace std;
+using std::string;
+using std::vector;
+using std::fstream;
+using std::ifstream;
+using std::ofstream;
+using std::cerr;
 
 class XMLParser
 {

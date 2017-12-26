@@ -5,7 +5,7 @@
 		<title>Red Alert 2</title>
 		<year>2000</year>
 		<genre>RTS</genre>
-		<rating>Best</rating>
+		<rating>10 / 10</rating>
 		<developer>Westwood Studios</developer>
 	</game>
 	
@@ -13,7 +13,7 @@
 		<title>Final Fantasy 12</title>
 		<year>2006</year>
 		<genre>RPG</genre>
-		<rating>Fantastic</rating>
+		<rating>9 / 10</rating>
 		<developer>Square Enix</developer>
 	</game>
 	
@@ -21,7 +21,7 @@
 		<title>Call of Duty Modern Warfare 2</title>
 		<year>2009</year>
 		<genre>FPS</genre>
-		<rating>Great</rating>
+		<rating>9 / 10</rating>
 		<developer>Infinity Ward</developer>
 	</game>
 	
@@ -29,7 +29,7 @@
 		<title>Persona 4</title>
 		<year>2008</year>
 		<genre>Adventure RPG</genre>
-		<rating>Amazing</rating>
+		<rating>10 / 10</rating>
 		<developer>Atlus</developer>
 	</game>
 	
@@ -37,7 +37,7 @@
 		<title>Demon's Souls</title>
 		<year>2009</year>
 		<genre>RPG</genre>
-		<rating>Very good</rating>
+		<rating>9 / 10</rating>
 		<developer>Atlus</developer>
 	</game>
 </favouriteGames>
